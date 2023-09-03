@@ -22,6 +22,7 @@ const Login = ({ setUser }) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
+      redirectTo: window.location.origin
     });
 
     if (error) {

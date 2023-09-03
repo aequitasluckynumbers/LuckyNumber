@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: "#311951";
+  --secondary: "#25213B";
+  --text: "#25213B";
+  --heading: "#333333";
+  --label: "#52525C";
+  --background: "#F8F8FF";
+  --danger: "#EB5757";
+  --border: rgba(128, 128, 128, 0.562);
+  /* --border: "#d9d9d9"; */
+  --bg-gradient: linear-gradient(180deg, #1c003e 0%, #1c0020 100%);
+  --blue-gradient: linear-gradient(180deg, #0d87b4 0%, #1d4778 100%);
+}
+
+* {
+  font-family: "Montserrat", sans-serif;
+}
+
+.gradient-background {
+  background: var(--bg-gradient);
+}
+
+.blue-gradient {
+  background: var(--blue-gradient);
+}
+
+h1 {
+  color: var(--heading);
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 2.2rem;
+  letter-spacing: 0.02em;
+}
+
+h2 {
+  color: var(--heading);
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.8rem;
+  letter-spacing: 0.02em;
+}
+
+h3 {
+  color: var(--heading);
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+p {
+  letter-spacing: 0.02em;
+}
+
+label {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 150%;
+  color: var(--label);
+}
+
+.input {
+  padding: 8px 16px;
+  background-color: #ffffff;
+  border: 2px solid;
+  border-color: var(--border);
+  border-radius: 8px;
+  outline: none !important;
+}
+
+.btn {
+  border-radius: 5px;
+  padding: 10px 16px;
+  font-weight: 500;
+  color: white;
+}
+
+.borderBtn {
+  border-radius: 5px;
+  padding: 10px 16px;
+  border: solid 1px;
+}
+
+.dotted {
+  height: 7px;
+  width: 7px;
+  border-radius: 50%;
+  background-color: black;
+}
+
+.secondaryButton {
+  padding: 5px 4px;
+}
+
+.secondaryButtonActive {
+  background-color: #333333;
+  border-radius: 5px;
+  padding: 5px 4px;
+  color: #fff;
+}
+
+.noscroll::-webkit-scrollbar {
+  display: none;
+}
+
+.react-datetime-picker__wrapper {
+  border: none !important;
+}

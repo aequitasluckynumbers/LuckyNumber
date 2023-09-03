@@ -1,0 +1,8 @@
+.DS_store
+/supabase/node_modules/
+/supabase/.env
+/supabase/supabase/.env
+
+*/node_modules
+*/.expo
+secrets

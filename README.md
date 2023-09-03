@@ -1,1 +1,1 @@
-# LuckyNumber
+# LuckyNumber by Aequitas

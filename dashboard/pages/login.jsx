@@ -46,7 +46,6 @@ const Login = ({ setUser }) => {
 
     console.log(data);
     cookies.set("authorization", data.session.access_token, { path: "/" });
-    console.log('I am here');
     router.push("/");
   };
 

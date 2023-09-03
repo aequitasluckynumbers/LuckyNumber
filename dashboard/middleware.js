@@ -18,10 +18,8 @@ export async function middleware(req) {
     const user = await jwtVerify(token.value, sec);
 
     if (user.payload.app_metadata.provider == "email") {
-      debugger;
       return NextResponse.next();
     } else {
-      debugger;
       return NextResponse.redirect(new URL("/login", req.url));
     }
   } catch (error) {

@@ -8,6 +8,7 @@ import NoAccess from "@/components/NoAccess";
 import { useRouter } from "next/router";
 import { ADMIN, BROADCASTER, EDITOR, SPONSOR } from "@/utils/constants";
 import { checkServerSideRouteAccess } from "@/lib/serverSideAuth";
+import Loader from "@/components/Loader";
 
 const AdminPage = ({ data, user, error }) => {
   const router = useRouter();
@@ -16,8 +17,10 @@ const AdminPage = ({ data, user, error }) => {
   const [memberEdit, setMemberEdit] = useState();
 
   const [popup, setPopup] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchAdmins = async () => {
+    setLoading(true);
     const query = supabase.from("admin").select();
 
     if (user?.role === BROADCASTER) {
@@ -34,6 +37,7 @@ const AdminPage = ({ data, user, error }) => {
       return;
     }
     setMemebers(data);
+    setLoading(false);
   };
 
   const handleRemoveAccount = async (id) => {
@@ -63,6 +67,7 @@ const AdminPage = ({ data, user, error }) => {
 
     fetchAdmins();
   }, [router]);
+  if (loading) return <Loader />;
 
   if (error && error.status === 401) return <NoAccess />;
 

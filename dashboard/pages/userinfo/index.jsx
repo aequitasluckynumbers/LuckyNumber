@@ -1,3 +1,4 @@
+import Loader from "@/components/Loader";
 import NoAccess from "@/components/NoAccess";
 import { Search } from "@/components/Search";
 import TopNav from "@/components/TopNav";
@@ -14,6 +15,7 @@ const UserInfoPage = ({ data, user, error }) => {
   const router = useRouter();
 
   const [popup, setPopup] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [usersList, setUsersList] = useState([]);
   const [age, setAge] = useState("");
   const [country, setCountry] = useState("");
@@ -22,6 +24,7 @@ const UserInfoPage = ({ data, user, error }) => {
   const [totalCount, setTotalCount] = useState(0);
 
   const fetchUserList = async () => {
+    setLoading(true);
     const query = supabase.from(USERS).select("*", {
       count: "exact",
     });
@@ -65,6 +68,7 @@ const UserInfoPage = ({ data, user, error }) => {
     console.log(count);
     setUsersList(data);
     setTotalCount(count);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -81,7 +85,7 @@ const UserInfoPage = ({ data, user, error }) => {
       return;
     }
   }, [router]);
-
+  if (loading) return <Loader />;
   if (error && error.status === 401) return <NoAccess />;
 
   return (

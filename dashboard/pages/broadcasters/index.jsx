@@ -9,15 +9,18 @@ import { toast } from "react-toastify";
 import { ADMIN, BROADCASTER, EDITOR, VIEWER } from "@/utils/constants";
 import { checkServerSideRouteAccess } from "@/lib/serverSideAuth";
 import NoAccess from "@/components/NoAccess";
+import Loader from "@/components/Loader";
 
 const BroadcasterPage = ({ data, user, error }) => {
   const [members, setMemebers] = useState([]);
   const [memberEdit, setMemberEdit] = useState();
   const [popup, setPopup] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const router = useRouter();
 
   const handleFetchBroadcaster = async () => {
+    setLoading(true);
     const { data, error } = await supabase
       .from(ADMIN)
       .select()
@@ -27,6 +30,7 @@ const BroadcasterPage = ({ data, user, error }) => {
       return;
     }
     setMemebers(data);
+    setLoading(false);
   };
 
   const handleRemoveAccount = async (i) => {
@@ -58,6 +62,7 @@ const BroadcasterPage = ({ data, user, error }) => {
 
     handleFetchBroadcaster();
   }, [router]);
+  if (loading) return <Loader />;
 
   if (error && error.status === 401) return <NoAccess />;
 

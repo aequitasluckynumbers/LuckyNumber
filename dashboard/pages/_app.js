@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import "@/styles/loader.css";
 export default function App({ Component, pageProps }) {
   const path = useRouter().asPath;
   const [user, setUser] = useState(null);

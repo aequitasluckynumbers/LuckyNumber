@@ -1,3 +1,4 @@
+import Loader from "@/components/Loader";
 import NoAccess from "@/components/NoAccess";
 import TopNav from "@/components/TopNav";
 import { checkServerSideRouteAccess } from "@/lib/serverSideAuth";
@@ -20,12 +21,14 @@ import { toast } from "react-toastify";
 const SponsorsPage = ({ data, user, error }) => {
   const router = useRouter();
   const [sponsors, setSponsors] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [adverts, setAdverts] = useState([]);
   const [media, setMedia] = useState(null);
 
   const [sponsorPopup, setSponsorPopup] = useState(false);
 
   const fetchSponsors = async () => {
+    setLoading(true);
     const { data, error } = await supabase
       .from(SPONSOR_ADVERT)
       .select("*")
@@ -38,6 +41,7 @@ const SponsorsPage = ({ data, user, error }) => {
     }
     console.log(data);
     setSponsors(data);
+    setLoading(false);
   };
 
   const fetchAdverts = async () => {
@@ -124,7 +128,7 @@ const SponsorsPage = ({ data, user, error }) => {
     fetchAdverts();
     fetchSponsors();
   }, [router]);
-
+  if (loading) return <Loader />;
   if (error && error.status === 401) return <NoAccess />;
 
   return (

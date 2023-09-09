@@ -5,6 +5,7 @@ import { USER, CARD, GAME, BROADCASTER, USERS } from "@/utils/constants";
 import { supabase } from "@/lib/supabase";
 import { useState, useEffect } from "react";
 import TotalCardsChart from "@/components/Charts/TotalCardsChart";
+import Loader from "@/components/Loader";
 
 export default function Home({ user }) {
   const [cardData, setCardData] = useState();
@@ -12,8 +13,10 @@ export default function Home({ user }) {
   const [winnersData, setWinnersData] = useState();
   const [male, setMale] = useState();
   const [female, setFemale] = useState();
+  const [loading, setLoading] = useState(true);
 
   const handleFetchData = async () => {
+    setLoading(true);
     const card = supabase
       .from(CARD)
       .select("*", { head: true, count: "exact" });
@@ -54,6 +57,7 @@ export default function Home({ user }) {
     setGameData(res[2].count);
     setMale(res[3].count);
     setFemale(res[4].count);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -63,6 +67,7 @@ export default function Home({ user }) {
     }, 12000);
     return () => clearInterval(interval);
   }, [user]);
+  if (loading) return <Loader />;
 
   return (
     <>

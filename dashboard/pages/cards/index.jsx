@@ -13,11 +13,13 @@ import { checkRouteAccess } from "@/utils/user/checkRouteAccess";
 import { checkServerSideRouteAccess } from "@/lib/serverSideAuth";
 import { getLocalDate, getLocalTime } from "@/utils/date";
 import ShowWinnersPopup from "@/popups/ShowWinnersPopup";
+import Loader from "@/components/Loader";
 
 const CardsPage = ({ data, user, error }) => {
   const [showArr, setShowArr] = useState([]);
   // const [fetchShow, setFetchShow] = useState(0);
   const [numbers, setNumbers] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [isClient, setIsClient] = useState(false);
   const [winnerArr, setWinnerArr] = useState([]);
@@ -26,6 +28,8 @@ const CardsPage = ({ data, user, error }) => {
   const router = useRouter();
 
   const handleFetchShow = async () => {
+    setLoading(true);
+
     let showsPromise = supabase
       .from("game")
       .select()
@@ -43,6 +47,7 @@ const CardsPage = ({ data, user, error }) => {
       return;
     }
     setShowArr(shows.data);
+    setLoading(false);
   };
 
   const getWinners = async (id) => {
@@ -97,6 +102,7 @@ const CardsPage = ({ data, user, error }) => {
     }
     handleFetchShow();
   }, [router]);
+  if (loading) return <Loader />;
 
   if (error && error.status === 401) return <NoAccess />;
 

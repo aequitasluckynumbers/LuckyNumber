@@ -97,6 +97,18 @@ export const GenderChart = ({ user }) => {
 
   const Gender = {
     options: {
+      noData: {
+        text: "Loading...",
+        align: "center",
+        verticalAlign: "middle",
+        offsetX: 0,
+        offsetY: 0,
+        style: {
+          color: "#1c003e",
+          fontSize: "14px",
+          fontFamily: "Helvetica",
+        },
+      },
       plotOptions: {
         bar: {
           distributed: true,

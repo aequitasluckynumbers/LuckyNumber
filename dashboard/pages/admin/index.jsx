@@ -9,13 +9,15 @@ import { useRouter } from "next/router";
 import { ADMIN, BROADCASTER, EDITOR, SPONSOR } from "@/utils/constants";
 import { checkServerSideRouteAccess } from "@/lib/serverSideAuth";
 import Loader from "@/components/Loader";
+import Modal from "@/components/Modal";
 
 const AdminPage = ({ data, user, error }) => {
   const router = useRouter();
 
   const [members, setMemebers] = useState([]);
   const [memberEdit, setMemberEdit] = useState();
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [userID, setUserID] = useState(null);
   const [popup, setPopup] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -53,6 +55,11 @@ const AdminPage = ({ data, user, error }) => {
       toast.success("User deleted");
       fetchAdmins();
     }
+  };
+
+  const confirmRemoveAccount = (deletingId) => {
+    setIsOpen(true);
+    setUserID(deletingId);
   };
 
   // checks the data and error status and renders UI conditionally
@@ -132,7 +139,7 @@ const AdminPage = ({ data, user, error }) => {
                   <button
                     className="btn border !border-danger !text-danger"
                     onClick={() => {
-                      handleRemoveAccount(member.id);
+                      confirmRemoveAccount(member.id);
                     }}
                   >
                     Remove
@@ -143,6 +150,33 @@ const AdminPage = ({ data, user, error }) => {
           </tbody>
         </table>
       </div>
+
+      <Modal
+        title="Do you want to remove this user ?"
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
+        <div className="max-w-fit mx-auto py-6">
+          <div className="flex gap-10">
+            <button
+              className="btn w-1/2  bg-primary"
+              onClick={() => {
+                handleRemoveAccount(userID);
+                setUserID(null);
+                setIsOpen(false);
+              }}
+            >
+              Confirm
+            </button>
+            <button
+              className="btn w-1/2  bg-danger"
+              onClick={() => setIsOpen(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };

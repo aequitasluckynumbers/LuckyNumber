@@ -98,6 +98,18 @@ export const TotalCardsChart = ({ user }) => {
 
   const totalCards = {
     options: {
+      noData: {
+        text: "Loading...",
+        align: "center",
+        verticalAlign: "middle",
+        offsetX: 0,
+        offsetY: 0,
+        style: {
+          color: "#1c003e",
+          fontSize: "14px",
+          fontFamily: "Helvetica",
+        },
+      },
       chart: {
         id: "area",
         toolbar: {

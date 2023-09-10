@@ -111,7 +111,7 @@ const Step2 = ({
             </button>
             <button
               className="btn w-1/2  bg-danger"
-              onClose={() => setIsOpen(false)}
+              onClick={() => setIsOpen(false)}
             >
               Cancel
             </button>

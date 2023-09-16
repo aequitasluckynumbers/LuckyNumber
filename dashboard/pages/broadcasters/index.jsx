@@ -10,14 +10,21 @@ import { ADMIN, BROADCASTER, EDITOR, VIEWER } from "@/utils/constants";
 import { checkServerSideRouteAccess } from "@/lib/serverSideAuth";
 import NoAccess from "@/components/NoAccess";
 import Loader from "@/components/Loader";
+import Modal from "@/components/Modal";
 
 const BroadcasterPage = ({ data, user, error }) => {
   const [members, setMemebers] = useState([]);
   const [memberEdit, setMemberEdit] = useState();
   const [popup, setPopup] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [index, setIndex] = useState(null);
   const router = useRouter();
+
+  const confirmRemoveAccount = (deletingId) => {
+    setIsOpen(true);
+    setIndex(deletingId);
+  };
 
   const handleFetchBroadcaster = async () => {
     setLoading(true);
@@ -119,7 +126,7 @@ const BroadcasterPage = ({ data, user, error }) => {
                 <td className="flex p-4">
                   <button
                     className="btn border !border-danger !text-danger"
-                    onClick={() => handleRemoveAccount(i)}
+                    onClick={() => confirmRemoveAccount(i)}
                   >
                     Remove
                   </button>
@@ -129,6 +136,32 @@ const BroadcasterPage = ({ data, user, error }) => {
           </tbody>
         </table>
       </div>
+      <Modal
+        title="Do you want to remove this account ?"
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
+        <div className="max-w-fit mx-auto py-6">
+          <div className="flex gap-10">
+            <button
+              className="btn w-1/2  bg-primary"
+              onClick={() => {
+                handleRemoveAccount(index);
+                setIndex(null);
+                setIsOpen(false);
+              }}
+            >
+              Confirm
+            </button>
+            <button
+              className="btn w-1/2  bg-danger"
+              onClick={() => setIsOpen(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };

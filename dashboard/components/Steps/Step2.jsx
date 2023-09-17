@@ -166,7 +166,7 @@ const Step2 = ({
                     onClick={() => confirmDelete(i)}
                     className="input w-1/4 text-center cursor-pointer"
                   >
-                    X
+                    &#10134;
                   </div>
                 </div>
               ))}
@@ -193,13 +193,14 @@ const Step2 = ({
                   </option>
                 ))}
               </select>
+              <div
+                onClick={handleAddNumber}
+                className="input w-1/4 text-center cursor-pointer"
+              >
+                &#10133;
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex justify-center my-4">
-          <button onClick={handleAddNumber} className="btn w-1/2  bg-primary">
-            Add
-          </button>
         </div>
       </div>
     </>

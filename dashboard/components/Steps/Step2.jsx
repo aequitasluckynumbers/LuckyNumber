@@ -1,5 +1,6 @@
 import { getTimeStringBySeconds } from "@/utils/date";
 import React, { useState, useEffect } from "react";
+import CSVReader from "react-csv-reader";
 import { toast } from "react-toastify";
 import Modal from "../Modal";
 
@@ -81,6 +82,32 @@ const Step2 = ({
     setIsOpen(true);
     setIndex(deletingIndex);
   };
+  const uploadFromCSV = (data = []) => {
+    try {
+      // Clone the state variables
+      let numbers = [...winningNumbers];
+      let newArray = [...arrivalTime];
+
+      // Process the CSV data and update the cloned arrays
+      data?.forEach((item) => {
+        const currSec = item.minutes * 60 + parseInt(item.seconds);
+
+        if (numbers.includes(item.number)) {
+          return;
+        }
+
+        numbers.push(item.number);
+        newArray.push(currSec);
+      });
+
+      // Update the state variables with the cloned arrays
+      setWinningNumbers([...numbers]);
+      setArrivalTime([...newArray]);
+    } catch (error) {
+      toast.error("Error uploading CSV:");
+      console.error("Error uploading CSV:", error);
+    }
+  };
 
   useEffect(() => {
     if (winningNumbers.length >= 15) {
@@ -89,6 +116,13 @@ const Step2 = ({
       setIsDisabled(true);
     }
   }, [winningNumbers]);
+
+  const papaparseOptions = {
+    header: true,
+    dynamicTyping: true,
+    skipEmptyLines: true,
+    transformHeader: (header) => header.toLowerCase().replace(/\W/g, "_"),
+  };
 
   return (
     <>
@@ -166,7 +200,7 @@ const Step2 = ({
                     onClick={() => confirmDelete(i)}
                     className="input w-1/4 text-center cursor-pointer"
                   >
-                    X
+                    &#10134;
                   </div>
                 </div>
               ))}
@@ -193,13 +227,22 @@ const Step2 = ({
                   </option>
                 ))}
               </select>
+              <div
+                onClick={handleAddNumber}
+                className="input w-1/4 text-center cursor-pointer"
+              >
+                &#10133;
+              </div>
             </div>
           </div>
         </div>
-        <div className="flex justify-center my-4">
-          <button onClick={handleAddNumber} className="btn w-1/2  bg-primary">
-            Add
-          </button>
+        <div className="flex justify-center my-4 loadFiles-item">
+          <CSVReader
+            label="Upload from CSV"
+            onFileLoaded={uploadFromCSV}
+            parserOptions={papaparseOptions}
+            cssClass="btn w-1/2  bg-primary"
+          />
         </div>
       </div>
     </>

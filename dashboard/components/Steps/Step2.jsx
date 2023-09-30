@@ -1,6 +1,7 @@
 import { getTimeStringBySeconds } from "@/utils/date";
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import Modal from "../Modal";
 
 const Step2 = ({
   winningNumbers,
@@ -13,6 +14,8 @@ const Step2 = ({
   const [number, setNumber] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [index, setIndex] = useState(null);
 
   const min = duration == 60 ? new Array(60).fill(0) : new Array(30).fill(0);
   const sec = new Array(60).fill(0);
@@ -74,6 +77,11 @@ const Step2 = ({
     setArrivalTime(newTimeArr);
   };
 
+  const confirmDelete = (deletingIndex) => {
+    setIsOpen(true);
+    setIndex(deletingIndex);
+  };
+
   useEffect(() => {
     if (winningNumbers.length >= 15) {
       setIsDisabled(false);
@@ -84,6 +92,32 @@ const Step2 = ({
 
   return (
     <>
+      <Modal
+        title="Do you want to delete ?"
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
+        <div className="max-w-fit mx-auto py-6">
+          <div className="flex gap-10">
+            <button
+              className="btn w-1/2  bg-primary"
+              onClick={() => {
+                handleDeleteNumber(index);
+                setIndex(null);
+                setIsOpen(false);
+              }}
+            >
+              Confirm
+            </button>
+            <button
+              className="btn w-1/2  bg-danger"
+              onClick={() => setIsOpen(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
       <div className="max-w-fit mx-auto py-6 px-9 bg-white border rounded-2xl">
         <h3 className="text-center mb-5 s">
           2. Add number of predetermined winning cards & release time
@@ -129,7 +163,7 @@ const Step2 = ({
                     {getTimeStringBySeconds(time)}
                   </div>
                   <div
-                    onClick={() => handleDeleteNumber(i)}
+                    onClick={() => confirmDelete(i)}
                     className="input w-1/4 text-center cursor-pointer"
                   >
                     X

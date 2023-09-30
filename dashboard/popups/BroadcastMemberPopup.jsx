@@ -4,9 +4,15 @@ import { supabase } from "@/lib/supabase";
 import { toast } from "react-toastify";
 import { ADMIN, BROADCASTER, EDITOR, VIEWER } from "@/utils/constants";
 import { EditBroadcasterSchema } from "@/utils/validation/broadcasterSchema";
+import Modal from "@/components/Modal";
 
 const TeamMemberPopup = ({ setPopup, member, handleFetchBroadcaster }) => {
   const [password, setPassword] = useState();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const confirmRemoveAccount = () => {
+    setIsOpen(true);
+  };
 
   const generatePassword = () => {
     // Create a random password
@@ -168,13 +174,39 @@ const TeamMemberPopup = ({ setPopup, member, handleFetchBroadcaster }) => {
               <button className="btn bg-primary" onClick={handleSubmit}>
                 Update Details
               </button>
-              <button className="btn bg-danger" onClick={handleRemoveAccount}>
+              <button className="btn bg-danger" onClick={confirmRemoveAccount}>
                 Delete Member
               </button>
             </div>
           </div>
         )}
       </Formik>
+
+      <Modal
+        title="Do you want to remove this account ?"
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
+        <div className="max-w-fit mx-auto py-6">
+          <div className="flex gap-10">
+            <button
+              className="btn w-1/2  bg-primary"
+              onClick={() => {
+                handleRemoveAccount();
+                setIsOpen(false);
+              }}
+            >
+              Confirm
+            </button>
+            <button
+              className="btn w-1/2  bg-danger"
+              onClick={() => setIsOpen(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };

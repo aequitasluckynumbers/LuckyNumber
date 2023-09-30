@@ -1,4 +1,5 @@
 import Loader from "@/components/Loader";
+import Modal from "@/components/Modal";
 import NoAccess from "@/components/NoAccess";
 import TopNav from "@/components/TopNav";
 import { checkServerSideRouteAccess } from "@/lib/serverSideAuth";
@@ -26,6 +27,10 @@ const SponsorsPage = ({ data, user, error }) => {
   const [media, setMedia] = useState(null);
 
   const [sponsorPopup, setSponsorPopup] = useState(false);
+  const [advertIsOpen, setAdvertIsOpen] = useState(false);
+  const [sponsorIsOpen, setSponsorIsOpen] = useState(false);
+  const [advertID, setAdvertID] = useState(null);
+  const [sponsorID, setSponsorID] = useState(null);
 
   const fetchSponsors = async () => {
     setLoading(true);
@@ -105,6 +110,11 @@ const SponsorsPage = ({ data, user, error }) => {
     toast.success("Advert Deleted Successfully");
   };
 
+  const confirmRemoveAdvert = (deletingId) => {
+    setAdvertIsOpen(true);
+    setAdvertID(deletingId);
+  };
+
   const removeSponsor = async (id) => {
     const { error } = await supabase.from(SPONSOR_ADVERT).delete().eq("id", id);
 
@@ -114,6 +124,11 @@ const SponsorsPage = ({ data, user, error }) => {
     }
     fetchSponsors();
     toast.success("Sponsor Deleted Successfully");
+  };
+
+  const confirmRemoveSponsor = (deletingId) => {
+    setSponsorIsOpen(true);
+    setSponsorID(deletingId);
   };
 
   // checks the data and error status and renders UI conditionally
@@ -184,7 +199,7 @@ const SponsorsPage = ({ data, user, error }) => {
                         {/* <p>Edit</p> */}
                         <p
                           className="font-semibold text-danger"
-                          onClick={() => removeSponsor(sponsor.id)}
+                          onClick={() => confirmRemoveSponsor(sponsor.id)}
                         >
                           Remove
                         </p>
@@ -207,7 +222,7 @@ const SponsorsPage = ({ data, user, error }) => {
                   alt=""
                 />
                 <button
-                  onClick={() => removeAdvert(advert.id)}
+                  onClick={() => confirmRemoveAdvert(advert.id)}
                   className="w-1/3 btn border !border-danger !text-danger mx-5"
                 >
                   Remove
@@ -229,6 +244,58 @@ const SponsorsPage = ({ data, user, error }) => {
           </div>
         </div>
       </div>
+      <Modal
+        title="Do you want to remove this advert ?"
+        isOpen={advertIsOpen}
+        onClose={() => setAdvertIsOpen(false)}
+      >
+        <div className="max-w-fit mx-auto py-6">
+          <div className="flex gap-10">
+            <button
+              className="btn w-1/2  bg-primary"
+              onClick={() => {
+                removeAdvert(advertID);
+                setAdvertID(null);
+                setAdvertIsOpen(false);
+              }}
+            >
+              Confirm
+            </button>
+            <button
+              className="btn w-1/2  bg-danger"
+              onClick={() => setAdvertIsOpen(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        title="Do you want to remove this sponsor ?"
+        isOpen={sponsorIsOpen}
+        onClose={() => setSponsorIsOpen(false)}
+      >
+        <div className="max-w-fit mx-auto py-6">
+          <div className="flex gap-10">
+            <button
+              className="btn w-1/2  bg-primary"
+              onClick={() => {
+                removeSponsor(sponsorID);
+                setSponsorID(null);
+                setSponsorIsOpen(false);
+              }}
+            >
+              Confirm
+            </button>
+            <button
+              className="btn w-1/2  bg-danger"
+              onClick={() => setSponsorIsOpen(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };

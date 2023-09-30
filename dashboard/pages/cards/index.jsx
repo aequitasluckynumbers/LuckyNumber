@@ -14,6 +14,7 @@ import { checkServerSideRouteAccess } from "@/lib/serverSideAuth";
 import { getLocalDate, getLocalTime } from "@/utils/date";
 import ShowWinnersPopup from "@/popups/ShowWinnersPopup";
 import Loader from "@/components/Loader";
+import Modal from "@/components/Modal";
 
 const CardsPage = ({ data, user, error }) => {
   const [showArr, setShowArr] = useState([]);
@@ -24,7 +25,8 @@ const CardsPage = ({ data, user, error }) => {
   const [isClient, setIsClient] = useState(false);
   const [winnerArr, setWinnerArr] = useState([]);
   const [showWinners, setShowWinners] = useState(false);
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [id, setID] = useState(null);
   const router = useRouter();
 
   const handleFetchShow = async () => {
@@ -66,10 +68,10 @@ const CardsPage = ({ data, user, error }) => {
   };
 
   const handleRemoveShow = async (id) => {
-    // const { data: accessData, error: accessError } = await checkPermission(
-    //   [ADMIN, BROADCASTER],
-    //   [ADMIN, EDITOR]
-    // );
+    const { data: accessData, error: accessError } = await checkPermission(
+      [ADMIN, BROADCASTER],
+      [ADMIN, EDITOR]
+    );
 
     if (user.subrole === VIEWER || user.role === ADMIN) {
       toast.error("Access Denied");
@@ -85,6 +87,11 @@ const CardsPage = ({ data, user, error }) => {
     }
     toast.success("Card deleted");
     handleFetchShow();
+  };
+
+  const confirmDelete = (deletingId) => {
+    setIsOpen(true);
+    setID(deletingId);
   };
 
   useEffect(() => {
@@ -210,7 +217,7 @@ const CardsPage = ({ data, user, error }) => {
                       <td className="flex px-4 py-2">
                         <button
                           className="btn !text-danger border border-danger"
-                          onClick={() => handleRemoveShow(show.id)}
+                          onClick={() => confirmDelete(show.id)}
                         >
                           Remove Show
                         </button>
@@ -221,6 +228,32 @@ const CardsPage = ({ data, user, error }) => {
             </tbody>
           </table>
         </div>
+        <Modal
+          title="Do you want to delete ?"
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+        >
+          <div className="max-w-fit mx-auto py-6">
+            <div className="flex gap-10">
+              <button
+                className="btn w-1/2  bg-primary"
+                onClick={() => {
+                  handleRemoveShow(id);
+                  setID(null);
+                  setIsOpen(false);
+                }}
+              >
+                Confirm
+              </button>
+              <button
+                className="btn w-1/2  bg-danger"
+                onClick={() => setIsOpen(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </Modal>
       </>
     );
 };

@@ -202,7 +202,7 @@ const Step2 = ({
               for="bordered-radio-1"
               class="w-full py-4 ml-2 text-sm font-medium"
             >
-              Add from table
+              Add through table
             </label>
           </div>
           <div class="flex items-center  pl-4">

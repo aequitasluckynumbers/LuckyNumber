@@ -17,6 +17,7 @@ const Step2 = ({
   const [seconds, setSeconds] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [index, setIndex] = useState(null);
+  const [type, setType] = useState("1");
 
   const min = duration == 60 ? new Array(60).fill(0) : new Array(30).fill(0);
   const sec = new Array(60).fill(0);
@@ -184,6 +185,46 @@ const Step2 = ({
         <h3 className="text-center mb-5 s">
           2. Add number of predetermined winning cards & release time
         </h3>
+        <div class="flex items-center justify-end	">
+          <div class="flex items-center  pl-4">
+            <input
+              id="bordered-radio-1"
+              type="radio"
+              value="1"
+              checked={type === "1"}
+              onClick={(_) => {
+                setType("1");
+              }}
+              name="bordered-radio"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-violet-900	"
+            />
+            <label
+              for="bordered-radio-1"
+              class="w-full py-4 ml-2 text-sm font-medium"
+            >
+              Add from table
+            </label>
+          </div>
+          <div class="flex items-center  pl-4">
+            <input
+              onClick={(_) => {
+                setType("2");
+              }}
+              checked={type === "2"}
+              id="bordered-radio-2"
+              type="radio"
+              value="2"
+              name="bordered-radio"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-violet-900	"
+            />
+            <label
+              for="bordered-radio-2"
+              class="w-full py-4 ml-2 text-sm font-medium"
+            >
+              Add from CSV
+            </label>
+          </div>
+        </div>
 
         <div className="flex gap-10">
           <div className="w-1/3">
@@ -255,23 +296,27 @@ const Step2 = ({
                   </option>
                 ))}
               </select>
-              <div
-                onClick={handleAddNumber}
-                className="input w-1/4 text-center cursor-pointer"
-              >
-                &#10133;
-              </div>
+              {type === "1" ? (
+                <div
+                  onClick={handleAddNumber}
+                  className="input w-1/4 text-center cursor-pointer"
+                >
+                  &#10133;
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
-        <div className="flex justify-center my-4 loadFiles-item">
-          <CSVReader
-            label="Upload from CSV"
-            onFileLoaded={uploadFromCSV}
-            parserOptions={papaparseOptions}
-            cssClass="btn w-1/2  bg-primary"
-          />
-        </div>
+        {type === "2" ? (
+          <div className="flex justify-center my-4 loadFiles-item">
+            <CSVReader
+              label="Upload from CSV"
+              onFileLoaded={uploadFromCSV}
+              parserOptions={papaparseOptions}
+              cssClass="btn w-1/2  bg-primary"
+            />
+          </div>
+        ) : null}
         <div className="flex justify-center my-4 loadFiles-item">
           <div class="hdg-label-info">
             <svg

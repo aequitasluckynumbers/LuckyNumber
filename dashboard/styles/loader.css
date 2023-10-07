@@ -131,3 +131,7 @@
 .icon:hover ~ .hdg-label-popup {
   display: block;
 }
+
+.hdg-label-popup:hover {
+  display: block;
+}

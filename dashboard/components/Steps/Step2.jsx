@@ -87,18 +87,46 @@ const Step2 = ({
       // Clone the state variables
       let numbers = [...winningNumbers];
       let newArray = [...arrivalTime];
+      let failedUpload = false;
 
+      if (!data.length) toast.error("Seems like your CSV is empty");
       // Process the CSV data and update the cloned arrays
       data?.forEach((item) => {
         const currSec = item.minutes * 60 + parseInt(item.seconds);
 
         if (numbers.includes(item.number)) {
+          failedUpload = true;
+          console.log("Failed here include number");
+          return;
+        }
+
+        if (item.number == 0) {
+          failedUpload = true;
+          return;
+        }
+
+        // check if time is incremented or not
+        const lastTime = newArray[newArray.length - 1];
+        if (currSec <= lastTime) {
+          failedUpload = true;
+          return;
+        }
+
+        // check if time is less than duration
+        if (currSec > duration * 60) {
+          failedUpload = true;
           return;
         }
 
         numbers.push(item.number);
         newArray.push(currSec);
       });
+
+      if (failedUpload) {
+        toast.error("Not a valid CSV file, Please check");
+        failedUpload = false;
+        return;
+      }
 
       // Update the state variables with the cloned arrays
       setWinningNumbers([...numbers]);
@@ -243,6 +271,45 @@ const Step2 = ({
             parserOptions={papaparseOptions}
             cssClass="btn w-1/2  bg-primary"
           />
+        </div>
+        <div className="flex justify-center my-4 loadFiles-item">
+          <div class="hdg-label-info">
+            <svg
+              className="icon"
+              height="20"
+              width="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22ZM12 17.75C12.4142 17.75 12.75 17.4142 12.75 17V11C12.75 10.5858 12.4142 10.25 12 10.25C11.5858 10.25 11.25 10.5858 11.25 11V17C11.25 17.4142 11.5858 17.75 12 17.75ZM12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8C11 7.44772 11.4477 7 12 7Z"
+                fill="#1C274C"
+              />
+            </svg>
+            <div class="hdg-label-popup">
+              <ul>
+                <li>
+                  <span>1. </span>
+                  <span>The number should start from 0</span>
+                </li>
+                <li>
+                  <span>2. </span>
+                  <span>The numbers should be unique</span>
+                </li>
+                <li>
+                  <span>3. </span>
+                  <span>The time should be greater than the previous</span>
+                </li>
+                <li>
+                  <span>4. </span>
+                  <span>The time should be less than the duration</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </>

@@ -18,6 +18,7 @@ const Step2 = ({
   const [isOpen, setIsOpen] = useState(false);
   const [index, setIndex] = useState(null);
   const [type, setType] = useState("1");
+  const [csvUploaded, setCsvUploaded] = useState(false);
 
   const min = duration == 60 ? new Array(60).fill(0) : new Array(30).fill(0);
   const sec = new Array(60).fill(0);
@@ -97,7 +98,6 @@ const Step2 = ({
 
         if (numbers.includes(item.number)) {
           failedUpload = true;
-          console.log("Failed here include number");
           return;
         }
 
@@ -130,12 +130,19 @@ const Step2 = ({
       }
 
       // Update the state variables with the cloned arrays
+      setCsvUploaded(true);
       setWinningNumbers([...numbers]);
       setArrivalTime([...newArray]);
     } catch (error) {
       toast.error("Error uploading CSV:");
       console.error("Error uploading CSV:", error);
     }
+  };
+
+  const clearNumbers = () => {
+    setWinningNumbers([]);
+    setArrivalTime([]);
+    if (csvUploaded) setCsvUploaded(false);
   };
 
   useEffect(() => {
@@ -153,6 +160,8 @@ const Step2 = ({
     transformHeader: (header) => header.toLowerCase().replace(/\W/g, "_"),
   };
 
+  const disabledSelect = type === "2";
+  const disabledClass = disabledSelect ? "disabled-select" : "";
   return (
     <>
       <Modal
@@ -185,44 +194,86 @@ const Step2 = ({
         <h3 className="text-center mb-5 s">
           2. Add number of predetermined winning cards & release time
         </h3>
-        <div class="flex items-center justify-end	">
-          <div class="flex items-center  pl-4">
-            <input
-              id="bordered-radio-1"
-              type="radio"
-              value="1"
-              checked={type === "1"}
-              onClick={(_) => {
-                setType("1");
-              }}
-              name="bordered-radio"
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-violet-900	"
-            />
-            <label
-              for="bordered-radio-1"
-              class="w-full py-4 ml-2 text-sm font-medium"
-            >
-              Add through table
-            </label>
+        <div className="flex items-center justify-between">
+          <div className="flex justify-start items-center">
+            <div class="hdg-label-info">
+              <span>Rules</span>
+              <svg
+                className="icon"
+                height="20"
+                width="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22ZM12 17.75C12.4142 17.75 12.75 17.4142 12.75 17V11C12.75 10.5858 12.4142 10.25 12 10.25C11.5858 10.25 11.25 10.5858 11.25 11V17C11.25 17.4142 11.5858 17.75 12 17.75ZM12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8C11 7.44772 11.4477 7 12 7Z"
+                  fill="#1C274C"
+                />
+              </svg>
+              <div class="hdg-label-popup">
+                <ul>
+                  <li>
+                    <span>1. </span>
+                    <span>The number should start from 0</span>
+                  </li>
+                  <li>
+                    <span>2. </span>
+                    <span>The numbers should be unique</span>
+                  </li>
+                  <li>
+                    <span>3. </span>
+                    <span>The time should be greater than the previous</span>
+                  </li>
+                  <li>
+                    <span>4. </span>
+                    <span>The time should be less than the duration</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <div class="flex items-center  pl-4">
-            <input
-              onClick={(_) => {
-                setType("2");
-              }}
-              checked={type === "2"}
-              id="bordered-radio-2"
-              type="radio"
-              value="2"
-              name="bordered-radio"
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-violet-900	"
-            />
-            <label
-              for="bordered-radio-2"
-              class="w-full py-4 ml-2 text-sm font-medium"
-            >
-              Add from CSV
-            </label>
+          <div class="flex items-center justify-end	">
+            <div class="flex items-center  pl-4">
+              <input
+                id="bordered-radio-1"
+                type="radio"
+                value="1"
+                checked={type === "1"}
+                onClick={(_) => {
+                  setType("1");
+                }}
+                name="bordered-radio"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-violet-900	"
+              />
+              <label
+                for="bordered-radio-1"
+                class="w-full py-4 ml-2 text-sm font-medium"
+              >
+                Add through table
+              </label>
+            </div>
+            <div class="flex items-center  pl-4">
+              <input
+                onClick={(_) => {
+                  setType("2");
+                }}
+                checked={type === "2"}
+                id="bordered-radio-2"
+                type="radio"
+                value="2"
+                name="bordered-radio"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-violet-900	"
+              />
+              <label
+                for="bordered-radio-2"
+                class="w-full py-4 ml-2 text-sm font-medium"
+              >
+                Add from CSV
+              </label>
+            </div>
           </div>
         </div>
 
@@ -245,7 +296,8 @@ const Step2 = ({
               <select
                 value={number}
                 onChange={(e) => setNumber(e.target.value * 1)}
-                className="input w-3/4 h-12"
+                className={"input w-3/4 h-12" + ` ${disabledClass}`}
+                disabled={disabledSelect}
               >
                 <option value={0}></option>
                 {numbersList.map((num, i) => (
@@ -277,7 +329,8 @@ const Step2 = ({
               <select
                 value={minutes}
                 onChange={(e) => setMinutes(e.target.value)}
-                className="input w-3/4 h-12"
+                className={"input w-3/4 h-12" + ` ${disabledClass}`}
+                disabled={disabledSelect}
               >
                 {min.map((num, i) => (
                   <option key={i} value={i}>
@@ -288,9 +341,10 @@ const Step2 = ({
               <select
                 value={seconds}
                 onChange={(e) => setSeconds(e.target.value)}
-                className="input w-3/4 h-12"
+                className={"input w-3/4 h-12" + ` ${disabledClass}`}
+                disabled={disabledSelect}
               >
-                {sec.map((num, i) => (
+                {sec.map((_, i) => (
                   <option key={i} value={i}>
                     {i}
                   </option>
@@ -307,7 +361,7 @@ const Step2 = ({
             </div>
           </div>
         </div>
-        {type === "2" ? (
+        {type === "2" && !csvUploaded ? (
           <div className="flex justify-center my-4 loadFiles-item">
             <CSVReader
               label="Upload from CSV"
@@ -317,45 +371,13 @@ const Step2 = ({
             />
           </div>
         ) : null}
-        <div className="flex justify-center my-4 loadFiles-item">
-          <div class="hdg-label-info">
-            <svg
-              className="icon"
-              height="20"
-              width="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22ZM12 17.75C12.4142 17.75 12.75 17.4142 12.75 17V11C12.75 10.5858 12.4142 10.25 12 10.25C11.5858 10.25 11.25 10.5858 11.25 11V17C11.25 17.4142 11.5858 17.75 12 17.75ZM12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8C11 7.44772 11.4477 7 12 7Z"
-                fill="#1C274C"
-              />
-            </svg>
-            <div class="hdg-label-popup">
-              <ul>
-                <li>
-                  <span>1. </span>
-                  <span>The number should start from 0</span>
-                </li>
-                <li>
-                  <span>2. </span>
-                  <span>The numbers should be unique</span>
-                </li>
-                <li>
-                  <span>3. </span>
-                  <span>The time should be greater than the previous</span>
-                </li>
-                <li>
-                  <span>4. </span>
-                  <span>The time should be less than the duration</span>
-                </li>
-              </ul>
-            </div>
+        {winningNumbers.length ? (
+          <div className="flex justify-center my-4 loadFiles-item">
+            <button onClick={clearNumbers} className="btn w-1/2  bg-primary">
+              Clear
+            </button>
           </div>
-        </div>
+        ) : null}
       </div>
     </>
   );

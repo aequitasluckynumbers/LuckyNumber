@@ -110,8 +110,9 @@
   border-radius: 20px;
   padding: 20px;
   top: 50%;
-  left: 50%;
+  left: 35%;
   border: 1px solid #d9d9d9;
+  z-index: 1;
 }
 
 .hdg-label-popup ul {
@@ -134,4 +135,15 @@
 
 .hdg-label-popup:hover {
   display: block;
+}
+
+.disabled-select {
+  background-color: #d9d9d9;
+  cursor: not-allowed;
+}
+
+.hdg-label-info {
+  display: flex;
+  gap: 5px;
+  align-items: center;
 }

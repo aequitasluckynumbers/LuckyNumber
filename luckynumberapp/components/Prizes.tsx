@@ -5,7 +5,7 @@ import React from "react";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function Prizes({ prizes }: { prizes: string[] }) {
+export default function Prizes({ prizes }: { prizes: any }) {
   return (
     <View>
       <View style={styles.imageContainer}>

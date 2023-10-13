@@ -73,8 +73,10 @@ const Schedule = ({ navigation }: ScheduleProps) => {
       .from("game")
       .select("*")
       .order("starts_at")
-      .lt("starts_at", dateString2)
-      .gt("starts_at", dateString1);
+      // .lt("starts_at", dateString2)
+      // .gt("starts_at", dateString1);
+
+    console.log(data, "Game data");
 
     if (error) {
       showToast("Failed to fetch schedule");
@@ -258,6 +260,18 @@ const ScheduleWithPrize = ({ game }: { game: Game }) => {
           <Prizes prizes={game.prizes} />
         </>
       )}
+      {showPrizes ? (
+        <>
+          <Text style={styles.prizeTitle}>Winning Numbers</Text>
+          <View style={styles.winningNumberContainer}>
+            {game.winning_numbers?.map((item) => (
+              <Text key={item} style={styles.winningNumber}>
+                {item}
+              </Text>
+            ))}
+          </View>
+        </>
+      ) : null}
       <View style={styles.line} />
     </View>
   );
@@ -267,6 +281,12 @@ const styles = StyleSheet.create({
   ScheduleComponentContainer: {
     paddingTop: windowHeight * 0.025,
     gap: windowHeight * 0.01,
+  },
+  winningNumberContainer: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
   },
   ScheduleDateContainer: {
     flexDirection: "row",
@@ -329,6 +349,11 @@ const styles = StyleSheet.create({
     height: windowHeight * 0.02,
     resizeMode: "contain",
     marginRight: 10,
+  },
+  winningNumber: {
+    color: colors.white,
+    textAlign: "center",
+    fontFamily: "MontserratBold",
   },
 });
 

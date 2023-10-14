@@ -1,5 +1,12 @@
-import { Dimensions, StyleSheet, View } from "react-native";
-import React, { useState, useEffect } from "react";
+import {
+  Dimensions,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useState, useEffect, useRef } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import global from "../styles/global";
 import GameTitle from "../components/GameTitle";
@@ -30,7 +37,9 @@ export default function Game({ route, navigation }: GameProps) {
   const [selected, setSelected] = useState<Array<number>>([]);
   const [adverts, setAdverts] = useState<any[]>([]);
   const [cardId, setCardId] = useState("");
-
+  const [modalVisible, setModalVisible] = useState(false);
+  const [winningStatus, setWinningStatus] = useState(false);
+  const modalRef = useRef(false);
   const { game } = route.params;
 
   const [] = useFonts({
@@ -99,14 +108,12 @@ export default function Game({ route, navigation }: GameProps) {
     console.log({ remainingTime });
 
     if (remainingTime < 0) {
-      navigation.dispatch(
-        StackActions.replace("GameResult", { winner: false })
-      );
+      setWinningStatus(false);
+      setModalVisible(true);
     } else {
       timerId = setTimeout(() => {
-        navigation.dispatch(
-          StackActions.replace("GameResult", { winner: false })
-        );
+        setWinningStatus(false);
+        setModalVisible(true);
       }, remainingTime);
     }
 
@@ -114,6 +121,17 @@ export default function Game({ route, navigation }: GameProps) {
       clearTimeout(timerId);
     };
   }, []);
+
+  useEffect(() => {
+    if (!modalVisible && modalRef.current)
+      navigation.dispatch(
+        StackActions.replace("GameResult", { winner: winningStatus })
+      );
+
+    if (modalVisible !== modalRef.current) {
+      modalRef.current = modalVisible;
+    }
+  }, [modalVisible]);
 
   useEffect(() => {
     if (selected.length === 15) {
@@ -131,9 +149,8 @@ export default function Game({ route, navigation }: GameProps) {
         console.log({ data, error });
 
         setLoading(false);
-        navigation.dispatch(
-          StackActions.replace("GameResult", { winner: true })
-        );
+        setWinningStatus(true);
+        setModalVisible(true);
       }, 3000);
     }
   }, [selected, cardId, navigation]);
@@ -172,6 +189,33 @@ export default function Game({ route, navigation }: GameProps) {
           <AdvertSlider data={adverts} />
         </SafeAreaView>
       </LinearGradient>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={[global.XBigText, { fontSize: windowHeight * 0.028 }]}>
+              Game Has Ended
+            </Text>
+            <Pressable
+              style={[global.lightbluebtn, styles.button, { marginTop: 20 }]}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <Text style={[global.mediumText, styles.closeTxt]}>
+                Check Result
+              </Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 }
@@ -208,5 +252,34 @@ const styles = StyleSheet.create({
     height: windowHeight * 0.12,
     alignSelf: "center",
     resizeMode: "contain",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 100,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    paddingHorizontal: 10,
+  },
+  closeTxt: {
+    textAlign: "center",
+    marginVertical: "3%",
+    fontWeight: "600",
   },
 });

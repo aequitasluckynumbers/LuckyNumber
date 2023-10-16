@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "luckynumbers",
-    "slug": "luckynumbers",
+    "slug": "lucky-numbers",
     "version": "0.0.22",
     "platforms": [
       "ios",
@@ -42,8 +42,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "3b61e239-3bbc-4738-909d-66551023fca9"
+        "projectId": "832b2b4e-b773-4ee4-8cbd-38b165b662c2"
       }
-    }
+    },
+    "owner": "luckynumbers"
   }
 }

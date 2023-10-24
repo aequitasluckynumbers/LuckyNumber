@@ -10,8 +10,8 @@ const TopNav = ({ title, user }) => {
 
         <div className="profile flex gap-2 items-center">
           <Image
-            src={"/images/profile.png"}
-            className="w-10"
+            src={"/images/user.png"}
+            className="w-8"
             width={50}
             height={50}
             alt=""

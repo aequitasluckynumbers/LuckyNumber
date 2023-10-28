@@ -1,12 +1,14 @@
 import {
   Dimensions,
   Image,
+  Modal,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import global from "../styles/global";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -39,7 +41,8 @@ export default function Home({ navigation }: HomeProps) {
   const [profilePopup, setProfilePopup] = useState<boolean>(false);
   const [upcomingGame, setUpcomingGame] = useState<Game | null>(null);
   const [timer, setTimer] = useState<string>("00:00:00");
-
+  const [modalVisible, setModalVisible] = useState(false);
+  const timerRef = useRef("");
   const [loaded] = useFonts({
     Montserrat: require("../assets/fonts/Montserrat-Regular.ttf"),
     MontserratBold: require("../assets/fonts/montserrat/Montserrat-Bold.ttf"),
@@ -101,8 +104,9 @@ export default function Home({ navigation }: HomeProps) {
     let minutes = Math.floor((difference / 1000 / 60) % 60);
     let hours = Math.floor(difference / (1000 * 60 * 60));
 
-    const timeString = `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes
-      }:${seconds < 10 ? `0${seconds}` : seconds}`;
+    const timeString = `${hours < 10 ? `0${hours}` : hours}:${
+      minutes < 10 ? `0${minutes}` : minutes
+    }:${seconds < 10 ? `0${seconds}` : seconds}`;
 
     setTimer(timeString);
   };
@@ -118,6 +122,15 @@ export default function Home({ navigation }: HomeProps) {
     }, 60000); // 1 min
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (timer !== timerRef.current) {
+      if (timer === "00:00:01" && timerRef.current === "00:00:02") {
+        setModalVisible(true);
+      }
+      timerRef.current = timer;
+    }
+  }, [timer]);
 
   // For timer
   useEffect(() => {
@@ -218,6 +231,36 @@ export default function Home({ navigation }: HomeProps) {
             timer={timer}
           />
         )}
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text
+                style={[global.XBigText, { fontSize: windowHeight * 0.028 }]}
+              >
+                Game has started
+              </Text>
+              <Pressable
+                style={[global.lightbluebtn, styles.button, { marginTop: 20 }]}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  setGamePopup(true);
+                }}
+              >
+                <Text style={[global.mediumText, styles.closeTxt]}>
+                  Play Game
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
       </>
     );
   }
@@ -332,5 +375,35 @@ const styles = StyleSheet.create({
     fontSize: windowHeight * 0.035,
     fontWeight: "500",
     marginVertical: windowHeight * 0.03,
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 100,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    paddingHorizontal: 10,
+  },
+  closeTxt: {
+    textAlign: "center",
+    marginVertical: "3%",
+    fontWeight: "600",
   },
 });

@@ -50,6 +50,11 @@ export default function CountryPopup({
               <Text style={styles.btnText}>India</Text>
             </LinearGradient>
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => hanldeSelectCountry("philippines")}>
+            <LinearGradient colors={["#0D87B4", "#1D4778"]} style={styles.btn}>
+              <Text style={styles.btnText}>Philippines</Text>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
         <View style={{ flex: 1 }}></View>
       </SafeAreaView>

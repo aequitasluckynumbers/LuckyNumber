@@ -28,12 +28,12 @@ const Splash = ({ navigation }: SplashProps) => {
     if (data.session) {
       setTimeout(() => {
         navigation.dispatch(StackActions.replace("Home"));
-      }, 2200);
+      }, 500);
       return;
     }
     setTimeout(() => {
       navigation.dispatch(StackActions.replace("Welcome"));
-    }, 2200);
+    }, 100);
   };
 
   // useEffect(() => {

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
 import global from "../styles/global";
 import { StackActions } from "@react-navigation/native";
 import { supabase } from "../lib/supabase";
@@ -9,8 +9,9 @@ import { RootStackParamsList } from "../navigation";
 import { useFonts } from "expo-font";
 import { BG_COLORS } from "../utils/constants";
 import { LinearGradient } from "expo-linear-gradient";
-import LottieView from "lottie-react-native";
-
+// import LottieView from "lottie-react-native";
+import AnimatedLoader from "react-native-animated-loader";
+import splash from "../assets/splash.png";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -22,23 +23,24 @@ const Splash = ({ navigation }: SplashProps) => {
     Montserrat: require("../assets/fonts/Montserrat-Regular.ttf"),
   });
 
+
   const checkSession = async () => {
     const { data, error } = await supabase.auth.getSession();
     console.log(data, error);
     if (data.session) {
       setTimeout(() => {
         navigation.dispatch(StackActions.replace("Home"));
-      }, 500);
+      }, 3000);
       return;
     }
     setTimeout(() => {
       navigation.dispatch(StackActions.replace("Welcome"));
-    }, 100);
+    }, 3000);
   };
 
-  // useEffect(() => {
-  //   checkSession();
-  // }, []);
+  useEffect(() => {
+    checkSession();
+  }, []);
 
   return (
     <LinearGradient colors={BG_COLORS} style={global.bg}>
@@ -47,21 +49,22 @@ const Splash = ({ navigation }: SplashProps) => {
           style={[global.container, { marginHorizontal: windowHeight * 0.04 }]}
         >
           <View style={styles.StarTitleSection}>
-            <LottieView
-              autoPlay
+            <Image
+              source={splash}
               style={{
                 width: windowWidth,
                 height: windowHeight,
                 marginBottom: 30,
               }}
-              loop={false}
-              source={require("../assets/animations/app-launch.json")}
-              onAnimationFinish={checkSession}
             />
           </View>
-          {/* <View style={styles.logoSection}>
-            <LogoSection />
-          </View> */}
+
+          <AnimatedLoader
+            visible={true}
+            animationStyle={styles.lottie}
+            source={require("../assets/animations/loader.json")}
+            speed={1}
+          ></AnimatedLoader>
         </View>
       </SafeAreaView>
     </LinearGradient>
@@ -78,6 +81,11 @@ const styles = StyleSheet.create({
   logoSection: {
     justifyContent: "flex-end",
     alignItems: "center",
+  },
+  lottie: {
+    width: 100,
+    height: 100,
+    marginTop: 100,
   },
 });
 

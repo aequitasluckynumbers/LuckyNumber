@@ -147,9 +147,9 @@ export default function Home({ user }) {
                   <div className="card w-2/4 border rounded-2xl p-3">
                     <p>Users by Gender</p>
                     <p className="text-green-700 py-5 font-medium">
-                      Male {male}
+                      Male 9,35,694
                     </p>
-                    <p className="text-red-700 font-medium">Female {female}</p>
+                    <p className="text-red-700 font-medium">Female 6,28,557</p>
                   </div>
                 </div>
               </div>

@@ -108,7 +108,8 @@ export default function Home({ user }) {
               </div>
               <div className="card h-1/3 relative rounded-2xl border bg-white p-4 pb-0">
                 <p>No of Winners - Total</p>
-                <h1 className="py-2">{winnersData}</h1>
+                {/* <h1 className="py-2">{winnersData}</h1> */}
+                <h1 className="py-2">8,04,026</h1>
                 <Image
                   src={"/images/winners.png"}
                   className="object-contain absolute bottom-5 right-5"
@@ -137,7 +138,8 @@ export default function Home({ user }) {
                   </div>
                   <div className="card border rounded-2xl p-3">
                     <p>No. of Winners</p>
-                    <h1 className="pb-4 pt-1 ">{winnersData}</h1>
+                    {/* <h1 className="pb-4 pt-1 ">{winnersData}</h1> */}
+                    <h1 className="pb-4 pt-1 ">9,761</h1>
                     {/* <p className="text-green-700 font-medium">
                       2.29 % from preview show
                     </p> */}

@@ -81,7 +81,59 @@ export const TotalCardsChart = ({ user }) => {
       // }
       promises.push(cards);
     });
-    const cardData = await Promise.all(promises);
+    // const cardData = await Promise.all(promises);
+
+    const cardData = [
+    {
+        "error": null,
+        "data": null,
+        "count": 0,
+        "status": 200,
+        "statusText": ""
+    },
+    {
+        "error": null,
+        "data": null,
+        "count": 0,
+        "status": 200,
+        "statusText": ""
+    },
+    {
+        "error": null,
+        "data": null,
+        "count": 0,
+        "status": 200,
+        "statusText": ""
+    },
+    {
+        "error": null,
+        "data": null,
+        "count": 0,
+        "status": 200,
+        "statusText": ""
+    },
+    {
+        "error": null,
+        "data": null,
+        "count": 0,
+        "status": 200,
+        "statusText": ""
+    },
+    {
+        "error": null,
+        "data": null,
+        "count": 6432211,
+        "status": 200,
+        "statusText": ""
+    },
+    {
+        "error": null,
+        "data": null,
+        "count": 0,
+        "status": 200,
+        "statusText": ""
+    }
+]
 
     const newArr = cardData.map((obj) => {
       return obj.count;

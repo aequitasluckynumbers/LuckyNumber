@@ -109,7 +109,7 @@ export default function Home({ user }) {
               <div className="card h-1/3 relative rounded-2xl border bg-white p-4 pb-0">
                 <p>No of Winners - Total</p>
                 {/* <h1 className="py-2">{winnersData}</h1> */}
-                <h1 className="py-2">8,04,026</h1>
+                <h1 className="py-2">804,026</h1>
                 <Image
                   src={"/images/winners.png"}
                   className="object-contain absolute bottom-5 right-5"

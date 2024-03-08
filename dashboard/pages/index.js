@@ -82,7 +82,7 @@ export default function Home({ user }) {
             <div className="min-h-[50vh] w-1/4 flex flex-col gap-1">
               <div className="card h-1/3 relative rounded-2xl border bg-white p-4 pb-0">
                 <p>Card Downloads - Total</p>
-                // <h1 className="py-2">{cardData}</h1>
+                {/* <h1 className="py-2">{cardData}</h1> */}
                 <h1 className="py-2">6,432,211</h1>
                 <Image
                   src={"/images/downloads.png"}
@@ -93,9 +93,9 @@ export default function Home({ user }) {
                 />
               </div>
               <div className="card h-1/3 relative rounded-2xl border bg-white p-4 pb-0">
-                // <p>Games - Total</p>
+                {/* <p>Games - Total</p> */}
                 <p>App Downloads - Total</p>
-                // <h1 className="py-2">{gameData}</h1>
+                {/* <h1 className="py-2">{gameData}</h1> */}
                 <h1 className="py-2">45,452,198</h1>
                 {/* <p className="text-red-500">2.29%</p> */}
                 <Image
@@ -129,7 +129,7 @@ export default function Home({ user }) {
                 <div className="flex gap-2">
                   <div className="card border rounded-2xl p-3">
                     <p>Card Downloads</p>
-                    // <h1 className="pb-4 pt-1 ">{cardData}</h1>
+                    {/* <h1 className="pb-4 pt-1 ">{cardData}</h1>*/}
                     <h1 className="pb-4 pt-1 ">1,564,251</h1>
                     {/* <p className="text-green-700 font-medium">
                       2.29 % from preview show
